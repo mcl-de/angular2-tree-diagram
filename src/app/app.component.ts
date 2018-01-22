@@ -2,6 +2,7 @@
  * Angular 2 decorators and services
  */
 import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {NxControl} from 'negsoft-control';
 import {AppState} from './app.service';
 import {TreeDiagramNode} from './tree/classes/node.class';
 import {Tree, TreeConfig, TreeSizeConfig} from './tree/tree.component';
@@ -41,11 +42,13 @@ export class AppComponent implements OnInit {
 	public tree: TreeConfig;
 
 	@ViewChild('treeComponent') private treeComponent: Tree;
-	private simpleTreeJson = [{
-		'guid': 'bc4c7a02-5379-4046-92be-12c67af4295a',
-		'displayName': 'Elentrix',
-		'readonly': true
-	}];
+	private simpleTreeJson = [
+		{
+			'guid': 'bc4c7a02-5379-4046-92be-12c67af4295a',
+			'displayName': 'Elentrix',
+			'readonly': true
+		}
+	];
 
 	private complexTreeJson;
 	private isComplex = true;
@@ -57,6 +60,16 @@ export class AppComponent implements OnInit {
 
 	public async ngOnInit() {
 		this.complexTreeJson = await System.import('../assets/mock-data/mock-data.json');
+		this.complexTreeJson.forEach(node => {
+			node.controls = [];
+			node.controls.push(new NxControl({
+				icon: 'pencil',
+				label: 'test',
+				action: () => new Promise<void>((resolve) => {
+					resolve();
+				})
+			}));
+		});
 		this.tree = {
 			json: this.complexTreeJson,
 			config: this.treeConfig

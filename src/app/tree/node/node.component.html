@@ -41,6 +41,13 @@
                 ></span>
                 <span class="children-count"> ({{node.childrenCount()}})</span>
             </div>
+
+            <div>
+                <div *ngFor="let control of node.controls">
+                    {{control.label}}
+                    <!--<nx-control [control]="control"></nx-control>-->
+                </div>
+            </div>
         </div>
     </div>
     <div class="tree-children"

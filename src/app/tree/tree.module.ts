@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { Tree } from './tree.component'
 import { Node } from './node'
+import {NxControlModule} from 'negsoft-control';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { Node } from './node'
     Node
   ],
   imports: [
-    CommonModule
+    CommonModule,
+      NxControlModule
   ],
   exports: [
     Tree,
