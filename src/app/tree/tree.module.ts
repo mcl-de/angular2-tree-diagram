@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { Tree } from './tree.component'
 import { Node } from './node'
-import { NodesListService } from './services/nodesList.service'
 
 @NgModule({
   declarations: [
@@ -20,9 +19,7 @@ import { NodesListService } from './services/nodesList.service'
     Tree,
     Node
   ],
-  providers:[
-    NodesListService
-  ]
+  providers: []
 })
 export class TreeDiagram {
 

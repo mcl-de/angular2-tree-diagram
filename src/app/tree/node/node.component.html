@@ -1,8 +1,10 @@
 <div class="line-to"></div>
 <div id="tree-node-{{node.guid}}"
      [ngClass]="{'tree-element-container': !0, 'tree-element-has-children': node.hasChildren()}"
-     [style.width.px]="node.width"
+     [style.width.px]="node.totalWidth"
      [style.height.px]="node.height"
+
+     [style.transform]="transform"
 >
     <div [ngClass]="{
     'tree-element-main': !0,
@@ -14,7 +16,7 @@
          [attr.draggable]="node.isMaker ? null : 'true'"
          [style.width.px]="node.width"
          [style.height.px]="node.height"
-         (drop)="node.drop($event)"
+         (drop)="onNodeDrop($event, node)"
          (dragenter)="node.dragenter($event)"
          (dragstart)="node.dragstart($event)"
          (dragover)="node.dragover($event)"
@@ -24,19 +26,19 @@
         <div class="rect"
              [style.width.px]="node.width"
              [style.height.px]="node.height"
+             (click)="nodeClick()"
         >
-            <div class="buttons">
-                <div class="delete" (click)="node.destroy()"></div>
-                <div class="toggler"
-                     (click)="node.toggle()"
-                ></div>
-                <div class="add" (click)="node.addChild()"></div>
-            </div>
+
             <div class="tree-text tree-text-non-editable">
                 <span>{{node.displayName}}</span>
             </div>
             <div class="tree-text tree-text-editable">
-                <span #disaplyName contenteditable [innerHtml]="node.displayName" (blur)="node.displayName=$event.srcElement.innerText"></span>
+                <span #disaplyName
+                      [innerHtml]="node.displayName"
+                      (blur)="node.displayName=$event.srcElement.innerText"
+                      [attr.contenteditable]="!node.readonly"
+                      (click)="onTextClick($event)"
+                ></span>
                 <span class="children-count"> ({{node.childrenCount()}})</span>
             </div>
         </div>
@@ -47,7 +49,9 @@
         <div class="tree-elements-group">
             <div *ngFor="let child of node.children"
                  [treeDiagramNode]="child"
-                 class="tree-node tree-child"></div>
+                 class="tree-node tree-child"
+                 (nodeClicked)="nodeClick($event)"></div>
+
         </div>
     </div>
 </div>

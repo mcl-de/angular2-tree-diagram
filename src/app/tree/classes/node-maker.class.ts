@@ -1,12 +1,12 @@
-import { TreeDiagramNode } from "./node.class"
+import {NodeDroppedEvent, TreeDiagramNode} from './node.class';
 export class TreeDiagramNodeMaker extends TreeDiagramNode{
   public isMaker = true
-  public drop(event){
+  public drop(event): NodeDroppedEvent {
     event.preventDefault();
     let guid = this.getThisNodeList().draggingNodeGuid
     this.getThisNodeList().rootNode(guid);
     this.displayName = 'New node'
-    return false;
+    return null;
   }
 
   public dragenter (event) {

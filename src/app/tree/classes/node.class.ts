@@ -1,4 +1,8 @@
-import { TreeDiagramNodesList } from './nodesList.class'
+import { TreeDiagramNodesList } from './nodesList.class';
+export interface NodeDroppedEvent {
+  origin: string;
+  target: string;
+}
 export class TreeDiagramNode {
   public parentId: string | null;
   public guid: string;
@@ -9,18 +13,21 @@ export class TreeDiagramNode {
   private _toggle: boolean;
   public children: Set<string>;
   public displayName: string;
-
+  public readonly: boolean;
+  public childTranslation: number = 0;
+  public translationX: number = 0;
+  public totalWidth;
   constructor (props, config, public getThisNodeList: () => TreeDiagramNodesList) {
     if (!props.guid) {
       return;
     }
     for (let prop in props) {
       if (props.hasOwnProperty(prop)) {
-        this[prop] = props[prop]
+        this[prop] = props[prop];
       }
     }
 
-    this._toggle = false;
+    this._toggle = true;
 
     if (config.nodeWidth) {
       this.width = config.nodeWidth
@@ -32,7 +39,8 @@ export class TreeDiagramNode {
   }
 
   public destroy () {
-    this.getThisNodeList().destroy(this.guid)
+    throw new Error('Destroying is not supported')
+    // this.getThisNodeList().destroy(this.guid)
   }
 
   public get isExpanded () {
@@ -44,8 +52,11 @@ export class TreeDiagramNode {
   }
 
   public toggle (state = !this._toggle) {
-    this._toggle = state;
-    state && this.getThisNodeList().toggleSiblings(this.guid)
+    throw new Error('toggling is not supported')
+    // this._toggle = state;
+    // if (state) { // If we are setting this to toggled true then we need to inform all its siblings
+		// this.getThisNodeList().toggleSiblings(this.guid);
+    // }
   }
 
   public childrenCount () {
@@ -67,7 +78,7 @@ export class TreeDiagramNode {
   public dragstart (event) {
     event.dataTransfer.effectAllowed = 'move';
     this.isDragging = true;
-    this.toggle(false)
+    // this.toggle(false)
     this.getThisNodeList().draggingNodeGuid = this.guid
   }
 
@@ -85,16 +96,20 @@ export class TreeDiagramNode {
     this.isDragging = false;
   }
 
-  public drop (event) {
+  public drop (event): NodeDroppedEvent {
     event.preventDefault();
     let guid = this.getThisNodeList().draggingNodeGuid
-    this.getThisNodeList().transfer(guid, this.guid)
-    return false;
+    // this.getThisNodeList().transfer(guid, this.guid); this is disabled because changing the diagramm without reload is NOT supported
+    return {
+      origin: guid,
+        target: this.guid
+    };
   }
 
   public addChild(){
-    let newNodeGuid = this.getThisNodeList().newNode(this.guid)
-    this.children.add(newNodeGuid)
-    this.toggle(true)
+    throw new Error('Adding childs is not supported');
+    // let newNodeGuid = this.getThisNodeList().newNode(this.guid)
+    // this.children.add(newNodeGuid)
+    // this.toggle(true)
   }
 }
